@@ -1,0 +1,31 @@
+pragma solidity ^0.4.4;
+
+
+contract ERC20 {
+    function transfer(address _recipient, uint256 amount) public;
+    
+    
+} 
+
+
+contract ParaTransfer {
+    address public parachute;
+
+// again sets parachute as the msg.sender to ensure the multi-transfer function can only be called by this owner of the contract
+
+    function ParaTransfer() public {
+        parachute = msg.sender;
+    }    
+
+// multi-transfer this time uses array for both erc20 addresses and amounts. 
+// this cycles through each pair of address & amount, put in order in the array for a transfer of different amounts to diff erc20s
+
+
+    function multiTransfer(ERC20 token, address[] Airdrop, uint256[] amount) public {
+        require(msg.sender == parachute);
+        
+        for (uint256 i = 0; i < Airdrop.length; i++) {
+            token.transfer( Airdrop[i], amount[i] * 10 ** 18);
+        }
+    }
+}
